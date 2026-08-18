@@ -2,7 +2,7 @@ interface ButtonProps {
     text: string
 }
 
-export function Button(props:ButtonProps) {
+export function Button(props: ButtonProps) {
 
     return (
         <>
