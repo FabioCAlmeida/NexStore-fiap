@@ -23,6 +23,7 @@ export function ProductCard({ product, onAddCart }: ProductCardProps) {
             <h3>{product.title}</h3>
             <p>{product.description}</p>
             <p>{product.price}</p>
+            <button onClick={() => onAddCart(product)}>Adicionar ao carrinho</button>
         </section>
     )
 }
