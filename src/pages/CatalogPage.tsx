@@ -3,6 +3,7 @@ import type { Product } from "../types/product";
 import { ProductList } from "../components/ProductList";
 import type { CartItem } from "../types/cartItem";
 import { useProducts } from "../hooks/useProducts";
+import { Link } from "react-router-dom";
 
 
 export function CatalogPage() {
@@ -57,6 +58,7 @@ export function CatalogPage() {
 
     return (
         <section>
+            <Link to="/cart" >Itens disponiveis</Link>
             <input
                 type="text"
                 placeholder="Buscar produto..."
