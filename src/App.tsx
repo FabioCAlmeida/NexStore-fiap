@@ -7,6 +7,7 @@ import "./index.css"
 import type { CartItem } from "./types/cartItem"
 import { useState } from "react"
 import type { Product } from "./types/product"
+import { ProductPage } from "./pages/ProductPage"
 
 function App() {
   const [cartItem, setCartItem] = useState<CartItem[]>([])
@@ -70,7 +71,9 @@ function App() {
             <CartPage 
             onRemove={handleRemoveItem}
             onUpdateQuantity={handleUpdateQuantity} cartItem={cartItem} />} />
-        </Route>
+          <Route path="/product/:id" element={<ProductPage/>}>
+          </Route>
+          </Route>
       </Routes>
     </BrowserRouter>
   )
