@@ -71,7 +71,7 @@ function App() {
             <CartPage 
             onRemove={handleRemoveItem}
             onUpdateQuantity={handleUpdateQuantity} cartItem={cartItem} />} />
-          <Route path="/product/:id" element={<ProductPage/>}>
+          <Route path="/product/:id" element={<ProductPage onAddCart={handleAddCartItem} />}>
           </Route>
           </Route>
       </Routes>
