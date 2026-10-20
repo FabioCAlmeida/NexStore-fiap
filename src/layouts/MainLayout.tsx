@@ -7,16 +7,16 @@ interface MainLayoutProps {
     totalItems: number
 }
 
-export function MainLayout({totalItems}: MainLayoutProps) {
+export function MainLayout({ totalItems }: MainLayoutProps) {
 
     return (
         <div className="flex min-h-screen flex-col">
-            <Header totalItems={totalItems}/>
+            <Header totalItems={totalItems} />
 
             <main className="mx-auto w-full max-w-6xl flex-1 py-6 px-4">
 
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Outlet />
+                    <Outlet />
                 </ErrorBoundary>
             </main>
 
