@@ -1,13 +1,20 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { CatalogPage } from "./pages/CatalogPage"
+
 import { CartPage } from "./pages/CartPage"
 import { MainLayout } from "./layouts/MainLayout"
 
 import "./index.css"
 import type { CartItem } from "./types/cartItem"
-import { useState } from "react"
+import { useState, lazy } from "react"
 import type { Product } from "./types/product"
-import { ProductPage } from "./pages/ProductPage"
+
+import { NotFoundPage } from "./pages/NotFoundPage"
+
+const ProductPage = lazy(() => import('./pages/ProductPage').then
+((module) => ({default:module.ProductPage})))
+
+const CatalogPage = lazy(() => import('./pages/CatalogPage').then
+((module) => ({ default: module.CatalogPage })))
 
 function App() {
   const [cartItem, setCartItem] = useState<CartItem[]>([])
@@ -21,8 +28,8 @@ function App() {
     if (exists) {
 
       const newList = list.map((item) => {
-        if(item.product.id === product.id) {
-          return {...item, quantity: item.quantity + 1 }
+        if (item.product.id === product.id) {
+          return { ...item, quantity: item.quantity + 1 }
 
         } else {
           return item
@@ -45,9 +52,9 @@ function App() {
     const list = [...cartItem]
 
     const newList = list.map((item) => {
-      if(item.product.id === productId) {
-        return {...item, quantity: item.quantity + delta}
-      } else{
+      if (item.product.id === productId) {
+        return { ...item, quantity: item.quantity + delta }
+      } else {
         return item
       }
     })
@@ -68,12 +75,14 @@ function App() {
         <Route element={<MainLayout totalItems={cartItem.length} />}>
           <Route index element={<CatalogPage onAddCartItem={handleAddCartItem} />} />
           <Route path="/carrinho" element={
-            <CartPage 
-            onRemove={handleRemoveItem}
-            onUpdateQuantity={handleUpdateQuantity} cartItem={cartItem} />} />
+            <CartPage
+              onRemove={handleRemoveItem}
+              onUpdateQuantity={handleUpdateQuantity} cartItem={cartItem} />} />
           <Route path="/product/:id" element={<ProductPage onAddCart={handleAddCartItem} />}>
+
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
-          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   )
