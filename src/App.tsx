@@ -1,36 +1,29 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-
 import { CartPage } from "./pages/CartPage"
 import { MainLayout } from "./layouts/MainLayout"
 
 import "./index.css"
 import type { CartItem } from "./types/cartItem"
-import { useState, lazy } from "react"
+import { useState, useCallback } from "react"
 import type { Product } from "./types/product"
-
 import { NotFoundPage } from "./pages/NotFoundPage"
+import { ProductPage } from "./pages/ProductPage"
+import { CatalogPage } from "./pages/CatalogPage"
 
-const ProductPage = lazy(() => import('./pages/ProductPage').then
-((module) => ({default:module.ProductPage})))
-
-const CatalogPage = lazy(() => import('./pages/CatalogPage').then
-((module) => ({ default: module.CatalogPage })))
 
 function App() {
   const [cartItem, setCartItem] = useState<CartItem[]>([])
 
-  function handleAddCartItem(product: Product): void {
 
+  
+
+  const handleAddCartItem = useCallback((product: Product) => {
     const list = [...cartItem]
-
     const exists = list.find((value) => value.product.id === product.id)
-
     if (exists) {
-
       const newList = list.map((item) => {
         if (item.product.id === product.id) {
           return { ...item, quantity: item.quantity + 1 }
-
         } else {
           return item
         }
@@ -45,9 +38,9 @@ function App() {
     }
     list.push(item)
     setCartItem(list)
-  }
+  },[])
 
-  function handleUpdateQuantity(productId: number, delta: number) {
+  const handleUpdateQuantity = useCallback((productId: number, delta: number) => {
 
     const list = [...cartItem]
 
@@ -57,18 +50,17 @@ function App() {
       } else {
         return item
       }
-    })
+    }).filter((item) => item.quantity > 0)
 
     setCartItem(newList)
+  },[cartItem])
 
-
-  }
-
-  function handleRemoveItem(productId: number) {
+  const handleRemoveItem = useCallback((productId: number) => {
     const list = [...cartItem]
     const newList = list.filter((item) => item.product.id !== productId)
     setCartItem(newList)
-  }
+  },[])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -77,11 +69,13 @@ function App() {
           <Route path="/carrinho" element={
             <CartPage
               onRemove={handleRemoveItem}
-              onUpdateQuantity={handleUpdateQuantity} cartItem={cartItem} />} />
-          <Route path="/product/:id" element={<ProductPage onAddCart={handleAddCartItem} />}>
+              onUpdateQuantity={handleUpdateQuantity}
+              cartItem={cartItem} />
+          } />
+          <Route path="/product/:id" element={<ProductPage onAddCart={handleAddCartItem} />} />
 
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
+          {/* Catch-all */}
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
